@@ -1,14 +1,77 @@
 <html lang="en">
   <head>
-    <script src="./src/question2.js" type="module" defer></script>
- <script src="./src/question2.js" type="module" defer></script>
+    <script>
+      // format input without regard to caret jumping.
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const phoneInput = document.getElementById('phone1');
+
+        phoneInput.addEventListener('input', function () {
+          const input = this.value.replace(/\D/g, '').substring(0, 10);
+          const firstPart = input.substring(0, 3);
+          const middlePart = input.substring(3, 6);
+          const lastPart = input.substring(6, 10);
+
+          if (input.length > 6) {
+            this.value = `(${firstPart}) ${middlePart}-${lastPart}`;
+          } else if (input.length > 3) {
+            this.value = `(${firstPart}) ${middlePart}`;
+          } else if (input.length > 0) {
+            this.value = `${firstPart}`;
+          }
+        });
+      });
+
+      // format second input and also set the cursor at the appropriate position.
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const phoneInput = document.getElementById('phone2');
+
+        phoneInput.addEventListener('input', function () {
+          const input = this.value.replace(/\D/g, '').substring(0, 10);
+          const firstPart = input.substring(0, 3);
+          const middlePart = input.substring(3, 6);
+          const lastPart = input.substring(6, 10);
+
+          const oldSelectionStart = this.selectionStart;
+          const oldLength = this.value.length;
+
+          if (input.length > 6) {
+            this.value = `(${firstPart}) ${middlePart}-${lastPart}`;
+          } else if (input.length > 3) {
+            this.value = `(${firstPart}) ${middlePart}`;
+          } else if (input.length > 0) {
+            this.value = `${firstPart}`;
+          } else {
+            this.value = '';
+          }
+
+          const newLength = this.value.length;
+          const caretOffset = oldLength - oldSelectionStart;
+          const newSelectionStart = newLength - caretOffset;
+          this.setSelectionRange(newSelectionStart, newSelectionStart);
+        });
+      });
+    </script>
+
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
+    <h1>Question 1</h1>
     <div class="container text-center">
       <input
         type="tel"
-        id="phone"
+        id="phone1"
+        maxlength="16"
+        placeholder="mobile number"
+        autocomplete="off"
+      />
+      <div><label for="phone">(123) 456-7890</label></div>
+      <br />
+      <h1>Question 2 (handles caret jumping to the end)</h1>
+      <input
+        type="tel"
+        id="phone2"
         maxlength="16"
         placeholder="mobile number"
         autocomplete="off"
